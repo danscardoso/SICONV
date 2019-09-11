@@ -31,12 +31,12 @@ parser.add_argument('--semViews', action='store_true',
 parser.add_argument('--gerarCSV', action='store_true',
                    help='Informe esta flag para depois de fazer as views, gerar os CSVs apropriados.')
 
-#Informe para manter os arquivos baixados
+#Informe para manter os arquivos baixados depois de rodar o arquivo
 parser.add_argument('--keepDownload', action='store_true',
                    help='Informe esta flag para manter os arquivos baixado em sua pasta temporaria. Default: apagar ao final da execução do script')
 
 #Endereço da pasta com as views
-parser.add_argument('--viewFolder', nargs=1, default="./SQL/ViewsServidor",
+parser.add_argument('--viewFolder', nargs=1, default="./SQL/ViewsProntas",
                    help='Altere esta flag para mudar a pasta aonde as views se encontram. Default: ./SQL/ViewsServidor ')
 
 #Endereço do arquivo create schema
@@ -149,6 +149,7 @@ if reset_flag:
             except psycopg2.ProgrammingError:
                 continue
     conn.commit()
+
 elif truncate_flag:
     print (" *** " + ctime() + " Truncando as tabelas...")
     cur.execute('TRUNCATE TABLE '+ schema_alvo +'.consorcios')
@@ -205,6 +206,14 @@ if reset_flag or truncate_flag:
         cur.copy_expert(comando, open(endereco))
     #
     conn.commit()
+    #
+    # Agora vou adicionar as informações exógenas relevantes
+    #  -> funcao orcamentaria (vinda do Acess da Câmara dos Deputados)
+    lista_comandos.append( )
+
+    cur.copy_expert( ('COPY '+ schema_alvo +'.informacoes_orcamentarias_camara FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', getcwd() + 'DadosAux/funcao_orcamentaria_exportada_ordenada.txt') )
+
+    ('COPY '+ schema_alvo + '.' )
 
 #fazendo as views a menos que o usuario explicitamente não peça isso
 if not semViews_flag :

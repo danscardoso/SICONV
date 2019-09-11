@@ -1,11 +1,26 @@
 drop schema if exists siconv cascade;
 create schema siconv;
 
+-- ----------------------------------------------------------------------------
+-- AS TABELAS AQUI DENTRO SÃO PRÓPRIAS, O RESTO SÃO DO JEITO QUE VEM NO SICONV
+
+-- AQUI VOU COPIAR AS INFORMAÇÕES DE AÇÃO ORÇAMENTÁRIA DO ACESS DA CAMARA
+-- DEPOIS SE EU LEMBRAR, POSSO VERIFICAR SE A PLOA (SIOP) TEM INFORMAÇÕES
+-- MAIS CLARAS DESSAS AÇÕES ORÇAMENTARIAS
+CREATE TABLE siconv.informacoes_orcamentarias_camara ( 
+  codigo_acao_orcamentaria varchar(4)
+  ,nome_acao_orcamentaria text
+  ,funcao_orcamentaria varchar(30)
+--  ,unique (codigo_acao_orcamentaria)
+ );
+
+
 create table siconv.configuracao (
   data_atualizacao date,
   observacao varchar(100)
 );
 
+-------------------------------------------------------------------------------
 create table siconv.consorcios (
   id_proposta text ,
   cnpj_consorcio text,
