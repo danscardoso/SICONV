@@ -81,7 +81,7 @@ try:
     conn_string = "host='"+host+"' dbname='"+dbname+"' user='"+usuario+"' password='"+senha+"' port='"+port+"'"
     #
     #caso deixar a senha no script seja aceitável pode-se trocar as tres linhas de cima por esta
-    #conn_string = "host='"+host+"' dbname='"+dbname+"' user='admin' password='admin'"
+    #conn_string = "host='"+host+"' dbname='"+dbname+"' user='admin' password='admin' port='5432'"
     #
     print(" *** " + ctime() + " Testando conexao...")
     conn = psycopg2.connect(conn_string)    
@@ -137,7 +137,7 @@ cur = conn.cursor()
 if reset_flag:
     print (" *** " + ctime() + " Derrubando e recriando o schema ...")
     #
-    # Abro o arquivo que define o schema da tabela, leio ele todo, quebro em 
+    # Abro o arquivo que define o schema da tabela, leio ele todo, quebro em varios comandos
     with open(arquivo_schema) as arq_schema:
         comandos = arq_schema.read()
         comandos = comandos.upper().replace("SICONV", schema_alvo )
@@ -152,6 +152,7 @@ if reset_flag:
 
 elif truncate_flag:
     print (" *** " + ctime() + " Truncando as tabelas...")
+
     cur.execute('TRUNCATE TABLE '+ schema_alvo +'.consorcios')
     cur.execute('TRUNCATE TABLE '+ schema_alvo +'.convenio')
     cur.execute('TRUNCATE TABLE '+ schema_alvo +'.desbloqueio')
@@ -179,26 +180,29 @@ elif truncate_flag:
 
 if reset_flag or truncate_flag:
     lista_comandos = []
-    lista_comandos.append( ('COPY '+ schema_alvo +'.consorcios                 FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_consorcios.csv'))
+    # Esses aqui eu encontrei uso, alguma variável interessante
     lista_comandos.append( ('COPY '+ schema_alvo +'.convenio                   FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_convenio.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.desbloqueio                FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_desbloqueio_cr.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.desembolso                 FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_desembolso.csv'))
     lista_comandos.append( ('COPY '+ schema_alvo +'.emenda                     FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_emenda.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.empenho                    FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_empenho.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.empenho_desembolso         FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_empenho_desembolso.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.etapa_crono_fisico         FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_etapa_crono_fisico.csv'))
     lista_comandos.append( ('COPY '+ schema_alvo +'.historico_situacao         FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_historico_situacao.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.ingresso_contrapartida     FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_ingresso_contrapartida.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.meta_crono_fisico          FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_meta_crono_fisico.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.obtv_convenente            FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_obtv_convenente.csv'))
     lista_comandos.append( ('COPY '+ schema_alvo +'.pagamento                  FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_pagamento.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.plano_aplicacao_detalhado  FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_plano_aplicacao_detalhado.csv'))
     lista_comandos.append( ('COPY '+ schema_alvo +'.programa                   FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_programa.csv'))
     lista_comandos.append( ('COPY '+ schema_alvo +'.programa_proposta          FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_programa_proposta.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.proponentes                FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_proponentes.csv'))
     lista_comandos.append( ('COPY '+ schema_alvo +'.proposta                   FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_proposta.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.prorroga_oficio            FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_prorroga_oficio.csv'))
-    lista_comandos.append( ('COPY '+ schema_alvo +'.termo_aditivo              FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_termo_aditivo.csv'))
+    
+    #Esses aqui eu não encontrei uso
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.consorcios                 FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_consorcios.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.desbloqueio                FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_desbloqueio_cr.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.desembolso                 FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_desembolso.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.empenho                    FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_empenho.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.empenho_desembolso         FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_empenho_desembolso.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.etapa_crono_fisico         FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_etapa_crono_fisico.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.ingresso_contrapartida     FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_ingresso_contrapartida.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.meta_crono_fisico          FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_meta_crono_fisico.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.obtv_convenente            FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_obtv_convenente.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.plano_aplicacao_detalhado  FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_plano_aplicacao_detalhado.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.proponentes                FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_proponentes.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.prorroga_oficio            FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_prorroga_oficio.csv'))
+    #lista_comandos.append( ('COPY '+ schema_alvo +'.termo_aditivo              FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', nome_pasta_temp + '/siconv_termo_aditivo.csv'))
     #
     print (" *** " + ctime() + " Inserindo dados ...")
     for (comando, endereco) in lista_comandos:
@@ -209,11 +213,10 @@ if reset_flag or truncate_flag:
     #
     # Agora vou adicionar as informações exógenas relevantes
     #  -> funcao orcamentaria (vinda do Acess da Câmara dos Deputados)
-    lista_comandos.append( )
-
-    cur.copy_expert( ('COPY '+ schema_alvo +'.informacoes_orcamentarias_camara FROM STDIN ( FORMAT(\'csv\'), DELIMITER(\';\'), QUOTE(E\'\"\'), HEADER)', getcwd() + 'DadosAux/funcao_orcamentaria_exportada_ordenada.txt') )
-
-    ('COPY '+ schema_alvo + '.' )
+    comando = 'COPY '+ schema_alvo +'.informacoes_orcamentarias_camara FROM STDIN ( FORMAT(\'csv\'), DELIMITER(E\'\t\'), QUOTE(E\'\"\'), HEADER)'
+    arquivo = getcwd() + "/DadosAux/funcao_orcamentaria_exportada_ordenada.txt"
+    cur.copy_expert( comando, open(arquivo))
+    conn.commit()
 
 #fazendo as views a menos que o usuario explicitamente não peça isso
 if not semViews_flag :
@@ -239,10 +242,11 @@ if generateCSV_flag:
     lista_comandos.append("\\copy (select * from siconv.instrumentos)  to '" + getcwd() + "/siconv_cgdad_v2.02_instrumentos.txt' WITH (FORMAT CSV, NULL '', HEADER TRUE, DELIMITER E'\t')")
     lista_comandos.append("\\copy (select * from siconv.solicitantes)  to '" + getcwd() + "/siconv_cgdad_v2.02_proponentes.txt'  WITH (FORMAT CSV, NULL '', HEADER TRUE, DELIMITER E'\t')")
     lista_comandos.append("\\copy (select * from SICONV.tabelao)       to '" + getcwd() + "/siconv_cgdad_v2.02_propostas.txt'    WITH (FORMAT CSV, NULL '', HEADER TRUE, DELIMITER E'\t')")
-
-    print (" *** " + ctime() + " Inserindo dados ...")
+    #
+    print (" *** " + ctime() + " Exportando dados ...")
     for comando in lista_comandos:
         try:
+            print(comando)
             cur.execute(comando)
             conn.commit()
         except psycopg2.ProgrammingError:
