@@ -9,8 +9,8 @@ select
 
     -- Descrição do objeto
     siconv.proposta.objeto_proposta             as descricao_proposta,
-    siconv.programas_uni.nome_programa          as nome_programa,
-    siconv.programas_uni.acao_orcamentaria      as acao_orcamentaria,
+    siconv.vi_programas_unicos.nome_programa          as nome_programa,
+    siconv.vi_programas_unicos.acao_orcamentaria      as acao_orcamentaria,
     -- TODO: adicionar aqui informações de categorização a serem feitas pelo Gerson depois
     -- de homologada a categorização dele dos objetos comprados
 
@@ -152,7 +152,7 @@ FROM siconv.proposta
 full join siconv.convenio on proposta.id_proposta = convenio.id_proposta
 left join siconv.emenda_proposta on proposta.id_proposta = emenda_proposta.id_proposta
 left join siconv.programa_proposta_uni on programa_proposta_uni.id_proposta = proposta.id_proposta
-left join siconv.programas_uni on programas_uni.id_programa::integer = programa_proposta_uni.id_programa
+left join siconv.vi_programas_unicos on vi_programas_unicos.id_programa::integer = programa_proposta_uni.id_programa
 left join (
     select id_proposta,
                        min( to_timestamp(dia_historico_sit, 'DD/MM/YYYY hh24:mi:ss')) as data_inicio_execucao,
