@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS SICONV.emenda_proposta cascade;
-CREATE VIEW SICONV.emenda_proposta AS
+DROP VIEW IF EXISTS siconv_schema.emenda_proposta cascade;
+CREATE VIEW siconv_schema.emenda_proposta AS
 select id_proposta, ind_emenda_impositiva, valor_repasse_proposta_emenda, valor_repasse_emenda,
 	case
 		when tipo_parlamentar = 3 then 'COMISSAO'
@@ -26,7 +26,7 @@ from
 		--cod_programa_emenda,
 	    sum(replace(valor_repasse_proposta_emenda, ',','.')::numeric) as valor_repasse_proposta_emenda,
 	    SUM(replace(valor_repasse_emenda, ',','.')::numeric) as valor_repasse_emenda
-	from siconv.emenda
+	from siconv_schema.emenda
 	GROUP BY id_proposta
 	order by id_proposta
 ) T

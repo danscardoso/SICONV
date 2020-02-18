@@ -1,5 +1,5 @@
-drop schema if exists siconv cascade;
-create schema siconv;
+drop schema if exists siconv_schema cascade;
+create schema siconv_schema;
 
 -- ----------------------------------------------------------------------------
 -- AS TABELAS AQUI DENTRO SÃO PRÓPRIAS, O RESTO SÃO DO JEITO QUE VEM NO SICONV
@@ -7,7 +7,7 @@ create schema siconv;
 -- AQUI VOU COPIAR AS INFORMAÇÕES DE AÇÃO ORÇAMENTÁRIA DO ACESS DA CAMARA
 -- DEPOIS SE EU LEMBRAR, POSSO VERIFICAR SE A PLOA (SIOP) TEM INFORMAÇÕES
 -- MAIS CLARAS DESSAS AÇÕES ORÇAMENTARIAS
-CREATE TABLE siconv.informacoes_orcamentarias_camara ( 
+CREATE TABLE siconv_schema.informacoes_orcamentarias_camara ( 
   codigo_acao_orcamentaria varchar(4)
   ,nome_acao_orcamentaria text
   ,funcao_orcamentaria varchar(30)
@@ -15,13 +15,13 @@ CREATE TABLE siconv.informacoes_orcamentarias_camara (
  );
 
 
-create table siconv.configuracao (
+create table siconv_schema.configuracao (
   data_atualizacao date,
   observacao varchar(100)
 );
 
 -------------------------------------------------------------------------------
--- create table siconv.consorcios (
+-- create table siconv_schema.consorcios (
 --   id_proposta text ,
 --   cnpj_consorcio text,
 --   nome_consorcio text,
@@ -33,7 +33,7 @@ create table siconv.configuracao (
 --   nome_participante text
 -- );
 
-create table siconv.convenio (
+create table siconv_schema.convenio (
   nr_convenio text,
   id_proposta text,
   dia text,
@@ -53,6 +53,9 @@ create table siconv.convenio (
   dia_fim_vigenc_original_conv text,
   dias_prest_contas text,
   dia_limite_prest_contas text,
+  data_suspensiva text,
+  data_retirada_suspensiva text,
+  dias_clausula_suspensiva text,
   situacao_contratacao text,
   ind_assinado text,
   motivo_suspensao text,
@@ -73,7 +76,7 @@ create table siconv.convenio (
   vl_global_original_conv text
 );
 
---create table siconv.desbloqueio (
+--create table siconv_schema.desbloqueio (
 --  nr_convenio text,
 --  nr_ob text,
 --  data_cadastro text,
@@ -84,7 +87,7 @@ create table siconv.convenio (
 --  vl_bloqueado text
 --);
 
---create table siconv.desembolso (
+--create table siconv_schema.desembolso (
 --  id_desembolso text,
 --  nr_convenio text,
 --  dt_ult_desembolso text,
@@ -96,7 +99,7 @@ create table siconv.convenio (
 --  vl_desembolsado text
 --);
 
-create table siconv.emenda (
+create table siconv_schema.emenda (
   id_proposta text,
   qualif_proponente text,
   cod_programa_emenda text,
@@ -109,7 +112,7 @@ create table siconv.emenda (
   valor_repasse_emenda text
 );
 
---create table siconv.empenho (
+--create table siconv_schema.empenho (
 --  id_empenho text,
 --  nr_convenio text,
 --  nr_empenho text,
@@ -121,13 +124,13 @@ create table siconv.emenda (
 --  valor_empenho text
 --);
 
---create table siconv.empenho_desembolso (
+--create table siconv_schema.empenho_desembolso (
 --  id_desembolso text,
 --  id_empenho text,
 --  valor_grupo text
 --);
 
---create table siconv.etapa_crono_fisico (
+--create table siconv_schema.etapa_crono_fisico (
 --  id_meta text,
 --  id_etapa text,
 --  nr_etapa text,
@@ -143,7 +146,7 @@ create table siconv.emenda (
 --  vl_etapa text
 --);
 
-create table siconv.historico_situacao (
+create table siconv_schema.historico_situacao (
   id_proposta text,
   nr_convenio text,
   dia_historico_sit text,
@@ -152,13 +155,13 @@ create table siconv.historico_situacao (
   cod_historico_sit text
 );
 
---create table siconv.ingresso_contrapartida (
+--create table siconv_schema.ingresso_contrapartida (
 --  nr_convenio text,
 --  dt_ingresso_contrapartida text,
 --  vl_ingresso_contrapartida text
 --);
 
---create table siconv.meta_crono_fisico (
+--create table siconv_schema.meta_crono_fisico (
 --  id_meta text,
 --  nr_convenio text,
 --  cod_programa text,
@@ -177,7 +180,7 @@ create table siconv.historico_situacao (
 --  vl_meta text
 --);
 
---create table siconv.obtv_convenente (
+--create table siconv_schema.obtv_convenente (
 --  nr_mov_fin text,
 --  identif_favorecido_obtv_conv text,
 --  nm_favorecido_obtv_conv text,
@@ -185,7 +188,7 @@ create table siconv.historico_situacao (
 --  vl_pago_obtv_conv text
 --);
 
-create table siconv.pagamento (
+create table siconv_schema.pagamento (
   nr_mov_fin text,
   nr_convenio text,
   identif_fornecedor text,
@@ -197,7 +200,7 @@ create table siconv.pagamento (
   vl_pago text
 );
 
---create table siconv.plano_aplicacao_detalhado (
+--create table siconv_schema.plano_aplicacao_detalhado (
 --  id_proposta text,
 --  sigla text,
 --  municipio text,
@@ -214,7 +217,7 @@ create table siconv.pagamento (
 --  valor_total_item text
 --);
 
-create table siconv.programa (
+create table siconv_schema.programa (
   cod_orgao_sup_programa text,
   desc_orgao_sup_programa text,
   id_programa text,
@@ -235,12 +238,12 @@ create table siconv.programa (
   acao_orcamentaria text
 );
 
-create table siconv.programa_proposta (
+create table siconv_schema.programa_proposta (
   id_programa text,
   id_proposta text
 );
 
---create table siconv.proponentes (
+--create table siconv_schema.proponentes (
 --  identif_proponente text,
 --  municipio_proponente text,
 --  uf_proponente text,
@@ -253,7 +256,7 @@ create table siconv.programa_proposta (
 --  nm_proponente text
 --);
 
-create table siconv.proposta (
+create table siconv_schema.proposta (
   id_proposta text,
   uf_proponente text,
   munic_proponente text,
@@ -282,12 +285,13 @@ create table siconv.proposta (
   dia_fim_vigencia_proposta text,
   objeto_proposta text,
   item_investimento text,
+  ENVIADA_MANDATARIA text,
   vl_global_prop text,
   vl_repasse_prop text,
   vl_contrapartida_prop text
 );
 
---create table siconv.prorroga_oficio (
+--create table siconv_schema.prorroga_oficio (
 --  nr_convenio text,
 --  nr_prorroga text,
 --  dt_inicio_prorroga text,
@@ -297,7 +301,7 @@ create table siconv.proposta (
 --  sit_prorroga text
 --);
 
-create table siconv.termo_aditivo (
+create table siconv_schema.termo_aditivo (
   nr_convenio text,
   numero_ta text,
   tipo_ta text,

@@ -1,11 +1,9 @@
 -- Essa view serve para unicionar os vários registros referentes ao mesmo programa,
--- pois ocorrem múltiplos registros se um programa ocorrer em vários estados (entre)
--- outros casos.
+-- pois ocorrem múltiplos registros se um programa ocorrer em vários estados, atrapalhando os joins
+-- entre outros problemas.
 --
--- Isso gera um problema sério pois um join de propostas com o programa multiplica os
--- registros. Assim, ao fazer o join com essa view evita este problema.
-DROP VIEW IF EXISTS vi_siconv.vi_programas_unicos cascade;
-CREATE VIEW siconv.vi_programas_unicos AS
+DROP VIEW IF EXISTS siconv_schema.vi_programas_unicos cascade;
+CREATE VIEW siconv_schema.vi_programas_unicos AS
 select distinct
 	cod_orgao_sup_programa,
 	desc_orgao_sup_programa,
@@ -22,5 +20,5 @@ select distinct
 	dt_prog_ini_benef_esp,
 	dt_prog_fim_benef_esp,
 	acao_orcamentaria 
-from siconv.programa
+from siconv_schema.programa
 order by id_programa;
