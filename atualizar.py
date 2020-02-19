@@ -52,7 +52,6 @@ schema             = args.schema[0]
 reset_flag         = args.reset
 truncate_flag      = args.truncate
 keepDownload_flag  = args.keepDownload
-comViews_flag      = args.semViews == False
 pasta_views    = ( args.viewFolder[0] if isinstance(args.viewFolder, list) else args.viewFolder )
 arquivo_schema = ( args.schemaFile[0] if isinstance(args.schemaFile, list) else args.schemaFile )
 host           = ( args.host[0]       if isinstance(args.host, list)       else args.host )
@@ -124,4 +123,4 @@ siconv_tools.criar_views(pasta_views, schema, conn_string)
 
 # Apagando a pasta temporaria
 if not keepDownload_flag:
-    siconv_tools.remove_pasta_conteudo( nome_pasta_temp, schema )
+    siconv_tools.remove_pasta_conteudo( nome_pasta_temp )
